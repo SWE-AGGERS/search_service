@@ -2,8 +2,7 @@ import datetime
 
 from flask import Flask
 
-from auth_service.database import db, User
-from auth_service.views import blueprints
+from search_service.views import blueprints
 
 
 def create_app(debug=False):
@@ -22,23 +21,6 @@ def create_app(debug=False):
         app.register_blueprint(bp)
         bp.app = app
 
-    db.init_app(app)
-    db.create_all(app=app)
-
-    # create a first admin user
-    with app.app_context():
-        q = db.session.query(User).filter(User.email == 'example@example.com')
-        user = q.first()
-        if user is None:
-            example = User()
-            example.firstname = 'Admin'
-            example.lastname = 'Admin'
-            example.email = 'example@example.com'
-            example.dateofbirth = datetime.datetime(2020, 10, 5)
-            example.is_admin = True
-            example.set_password('admin')
-            db.session.add(example)
-            db.session.commit()
 
     return app
 

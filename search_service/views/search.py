@@ -1,30 +1,30 @@
-from flask import Blueprint, render_template
-from flask import request
-from search_service.constants import GET_USERS_URL
+from flask import Blueprint
+from search_service.constants import SEARCH_USER_URL, SEARC_STORIES_URL
+from flask import jsonify
+import requests
+
 search = Blueprint('search', __name__)
 
 
-@search.route('/search', methods=["GET"])
-def index():
-    search_text = request.args.get("search_text")
-    if search_text:
+@search.route("/search/<search_text>", methods=["GET"])
+def index(search_text):
+    user_search_url = "{}/{}".format(SEARCH_USER_URL, search_text)
+    headers = {'Content-type': 'application/json; charset=UTF-8'}
+    call_user_search = requests.get(user_search_url, headers=headers)
 
-        users = find_user(text=search_text)
+    users = call_user_search.json()
 
-        stories = find_story(text=search_text)
+    stroies_search_url =
 
-        if users and stories:
-            return render_template("search.html", users=users, stories=stories)
-        elif users:
-            return render_template("search.html", users=users)
-        elif stories:
-            return render_template("search.html", stories=stories)
-        else:
-            return render_template("search.html")
+    stories = find_story(text=search_text)
+    if users and stories:
+        return render_template("search.html", users=users, stories=stories)
+    elif users:
+        return render_template("search.html", users=users)
+    elif stories:
+        return render_template("search.html", stories=stories)
     else:
         return render_template("search.html")
 
+    return jsonify(data)
 
-def find_story(text):
-    result = Story.query.filter(func.lower(Story.text).contains(func.lower(text)))
-    return result if result.count() > 0 else None

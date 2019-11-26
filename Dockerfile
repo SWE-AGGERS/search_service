@@ -12,9 +12,9 @@ RUN python3 -m pip install -r requirements.txt
 
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
-ENV FLASK_APP auth_service/app.py
+ENV FLASK_APP search_service/app.py
 
-EXPOSE 5002
+EXPOSE 5006
 
 # bind to 0.0.0.0 will make Docker works
 CMD ["flask","run","--host", "0.0.0.0"]
