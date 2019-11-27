@@ -13,18 +13,12 @@ def index(search_text):
     call_user_search = requests.get(user_search_url, headers=headers)
 
     users = call_user_search.json()
-
-    stroies_search_url =
-
-    stories = find_story(text=search_text)
-    if users and stories:
-        return render_template("search.html", users=users, stories=stories)
-    elif users:
-        return render_template("search.html", users=users)
-    elif stories:
-        return render_template("search.html", stories=stories)
-    else:
-        return render_template("search.html")
-
+    data = {"story": {
+                    "text": search_text
+            }
+     }
+    call_stories_search = requests.post(SEARC_STORIES_URL,json=data, headers=headers)
+    stories = call_stories_search.json()
+    data = {"users":users,"stories":stories}
     return jsonify(data)
 
